@@ -12,19 +12,47 @@ $contactManager = new ContactManager($pdo);
 $commandHandler = new Command($contactManager);
 
 echo "Gestionnaire de contacts" . PHP_EOL;
-echo "Commandes disponibles : list, exit" . PHP_EOL;
+echo "Commandes disponibles :" . PHP_EOL;
+echo "- list" . PHP_EOL;
+echo "- detail id" . PHP_EOL;
+echo "- create name,email,phone_number" . PHP_EOL;
+echo "- delete id" . PHP_EOL;
+echo "- exit" . PHP_EOL;
 
 while (true) {
     echo "> ";
 
-    $command = trim(fgets(STDIN));
+    $userInput = trim(fgets(STDIN));
 
-    if ($command === 'list') {
+    if ($userInput === 'list') {
         $commandHandler->list();
         continue;
     }
 
-    if ($command === 'exit') {
+    if (preg_match('/^detail\s+([0-9]+)$/', $userInput, $matches)) {
+        $id = (int) $matches[1];
+
+        $commandHandler->detail($id);
+        continue;
+    }
+
+    if (preg_match('/^create\s+([^,]+),([^,]+),([^,]+)$/', $userInput, $matches)) {
+        $name        = trim($matches[1]);
+        $email       = trim($matches[2]);
+        $phoneNumber = trim($matches[3]);
+
+        $commandHandler->create($name, $email, $phoneNumber);
+        continue;
+    }
+
+    if (preg_match('/^delete\s+([0-9]+)$/', $userInput, $matches)) {
+        $id = (int) $matches[1];
+
+        $commandHandler->delete($id);
+        continue;
+    }
+
+    if ($userInput === 'exit') {
         echo "Fermeture du programme." . PHP_EOL;
         break;
     }

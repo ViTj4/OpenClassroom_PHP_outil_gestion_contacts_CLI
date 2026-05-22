@@ -7,8 +7,7 @@ class Contact
         private ?string $name = null,
         private ?string $email = null,
         private ?string $phoneNumber = null
-    ) {
-    }
+    ) {}
 
     public function getId(): ?int
     {
