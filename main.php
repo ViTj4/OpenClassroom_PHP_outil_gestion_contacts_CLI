@@ -3,9 +3,13 @@
 require_once __DIR__ . '/database/DBConnect.php';
 require_once __DIR__ . '/model/Contact.php';
 require_once __DIR__ . '/model/ContactManager.php';
+require_once __DIR__ . '/commands/Command.php';
 
 $dbConnect = new DBConnect();
 $pdo       = $dbConnect->getPDO();
+
+$contactManager = new ContactManager($pdo);
+$commandHandler = new Command($contactManager);
 
 echo "Gestionnaire de contacts" . PHP_EOL;
 echo "Commandes disponibles : list, exit" . PHP_EOL;
@@ -16,18 +20,7 @@ while (true) {
     $command = trim(fgets(STDIN));
 
     if ($command === 'list') {
-        $contactManager = new ContactManager($pdo);
-        $contacts       = $contactManager->findAll();
-
-        if (empty($contacts)) {
-            echo "Aucun contact trouvé." . PHP_EOL;
-            continue;
-        }
-
-        foreach ($contacts as $contact) {
-            echo $contact->toString();
-        }
-
+        $commandHandler->list();
         continue;
     }
 

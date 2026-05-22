@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/Contact.php';
-
 class ContactManager
 {
     private PDO $pdo;
@@ -16,8 +15,7 @@ class ContactManager
         $request = $this->pdo->query('SELECT id, name, email, phone_number FROM contact');
 
         $contactsData = $request->fetchAll();
-
-        $contacts = [];
+        $contacts     = [];
 
         foreach ($contactsData as $contactData) {
             $contacts[] = new Contact(
