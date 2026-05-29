@@ -7,6 +7,7 @@ class DBConnect
     private string $username = 'root';
     private string $password = '';
 
+    // Creates and returns a PDO connection configured for MySQL
     public function getPDO(): PDO
     {
         try {
@@ -20,7 +21,6 @@ class DBConnect
             $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
             return $pdo;
-
         } catch (PDOException $e) {
             die('Erreur de connexion : ' . $e->getMessage());
         }

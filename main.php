@@ -12,30 +12,31 @@ $contactManager = new ContactManager($pdo);
 $commandHandler = new Command($contactManager);
 
 echo "Gestionnaire de contacts" . PHP_EOL;
-echo "Commandes disponibles :" . PHP_EOL;
-echo "- list" . PHP_EOL;
-echo "- detail id" . PHP_EOL;
-echo "- create name,email,phone_number" . PHP_EOL;
-echo "- delete id" . PHP_EOL;
-echo "- exit" . PHP_EOL;
+echo "Tapez help pour afficher les commandes disponibles." . PHP_EOL;
 
 while (true) {
     echo "> ";
 
     $userInput = trim(fgets(STDIN));
 
+    if ($userInput === 'help') {
+        $commandHandler->help();
+        continue;
+    }
+
     if ($userInput === 'list') {
         $commandHandler->list();
         continue;
     }
 
+    // Detects a command like: detail 1
     if (preg_match('/^detail\s+([0-9]+)$/', $userInput, $matches)) {
         $id = (int) $matches[1];
 
         $commandHandler->detail($id);
         continue;
     }
-
+    // Detects a command like: create Name,email,phone
     if (preg_match('/^create\s+([^,]+),([^,]+),([^,]+)$/', $userInput, $matches)) {
         $name        = trim($matches[1]);
         $email       = trim($matches[2]);
@@ -57,5 +58,5 @@ while (true) {
         break;
     }
 
-    echo "Commande inconnue." . PHP_EOL;
+    echo "Commande inconnue. Tapez help pour afficher les commandes disponibles." . PHP_EOL;
 }
